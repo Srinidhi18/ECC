@@ -1,4 +1,4 @@
-/*$File_version=ms4.3.0.04$*/
+/*$File_version=ms4.3.0.00$*/
 /******************************************************************************/
 /* Procedure					: GRT_edt_sp_shippe_href					  */
 /* Description					: 											  */
@@ -20,11 +20,9 @@
 /* Modified By					: 											  */
 /* Date							: 											  */
 /* Description					: 											  */
-/* Banurekha B                31/1/2024                            SSIU-261   */
-/* Banurekha B                1/2/2024                             SSIU-263   */
 /******************************************************************************/
 
-create Procedure GRT_edt_sp_shippe_href
+Create Procedure GRT_edt_sp_shippe_href
 	@ctxt_ouinstance  	udd_ctxt_ouinstance, --Input 
 	@ctxt_user        	udd_ctxt_user, --Input 
 	@ctxt_language    	udd_ctxt_language, --Input 
@@ -115,39 +113,17 @@ Begin
   if @m_errorid <>   0    
   begin      
   return    
-   end   
-   
- --SSIU-261
- declare    @shipfromid_add udd_desc255              
-       
- Select @shipfromid_add = isnull(supp_addr_addid,'')+Space(3)+isnull(supp_addr_address1,'')+Space(3)+isnull(supp_addr_address2,'')+Space(3)+      
- isnull(supp_addr_address3,'')+Space(3)+isnull(supp_addr_city,'')+Space(3)+isnull(supp_addr_state,'')+Space(3)+isnull(supp_addr_zip,'')+Space(3)+isnull(supp_addr_phone,'')         
- from     supp_addr_address(nolock)             
- where  supp_addr_loid    = @lo_id                  
- AND   supp_addr_supcode   = @suppcusthdr           
- and   supp_addr_addid    = ISNULL(@shippedfromhr,supp_addr_addid) 
- --SSIU-261
+   end    
    
    Select  
 			@guid				'guid',   
 			@refdoc_mlt			'refdoc_mlt',   
 			--@ref_doc_hdn		'ref_doc_hdn',   
-			/*code reverted against the id SSIU-263 starts here */
-			/*code commented and added against the id SSIU-261 starts here */
-			isnull(supp_addr_addid,'')+Space(3)+isnull(supp_addr_address1,'')+Space(3)+isnull(supp_addr_address2,'')+Space(3)+isnull(supp_addr_address3,'')+Space(3)+isnull(supp_addr_city,'')+Space(3)+isnull(supp_addr_state,'')+Space(3)+isnull(supp_addr_zip,'')+Space(3)+isnull(supp_addr_phone,'') 
-			--/*@shipfromid_add*/ 'shipfromiddetails_grcrt', 
-			 'shipfromiddetails_grcrt', 
-			/*code commented and added against the id SSIU-261 ends here */
-            /*code reverted against the id SSIU-263 starts here */
-
-			/*code commented and added for the id SSIU-263 starts here */
-			/* ISNULL(@shippedfromhr,supp_addr_addid)'addressdet_edtgr',*/
-			 @shipfromid_add  'addressdet_edtgr',
-			 /*code commented and added for the id SSIU-263 ends here */
+			isnull(supp_addr_addid,'')+Space(3)+isnull(supp_addr_address1,'')+Space(3)+isnull(supp_addr_address2,'')+Space(3)+isnull(supp_addr_address3,'')+Space(3)+isnull(supp_addr_city,'')+Space(3)+isnull(supp_addr_state,'')+Space(3)+isnull(supp_addr_zip,'')+Spa
+ce(3)+isnull(supp_addr_phone,'') 'shipfromiddetails_grcrt',   
+			 ISNULL(@shippedfromhr,supp_addr_addid)  'addressdet_edtgr',
 			 @shippedfromhr								'shippedfromhr',   
 			@suppcusthdr		'suppcusthdr'
-			,@receiptno 'receiptno' --SSIU-261
-			,@shippedfromhr 'ShipFromID_EdtGr'--SSIU-261
 			from   supp_addr_address(nolock)   
 			where  supp_addr_loid    = @lo_id       
 			AND   supp_addr_supcode   = @suppcusthdr  
@@ -170,6 +146,7 @@ Begin
 Set nocount off
 
 End
+
 
 
 
